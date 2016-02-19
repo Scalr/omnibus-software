@@ -1,8 +1,8 @@
 name "cacerts"
 
-default_version "2015.10.30"
-source url: "http://curl.haxx.se/ca/cacert.pem",
-     md5: "6f41fb0f0c4b4695c2a6296892278141"
+default_version "2016.01.20"
+source  url: "http://curl.haxx.se/ca/cacert.pem",
+        md5: "06629db7f712ff3a75630eccaecc1fe4"
 
 relative_path "cacerts-#{version}"
 build do
