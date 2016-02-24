@@ -1,7 +1,7 @@
 name "cacerts"
 
 default_version "2016.01.20"
-source  url: "http://curl.haxx.se/ca/cacert.pem",
+source  url: "https://storage.googleapis.com/omnibus_sources/cacert.pem",
         md5: "06629db7f712ff3a75630eccaecc1fe4"
 
 relative_path "cacerts-#{version}"
