@@ -17,7 +17,7 @@
 name "nokogiri"
 
 license "MIT"
-license_file "https://github.com/sparklemotion/nokogiri/blob/master/LICENSE.txt"
+# license_file "https://github.com/sparklemotion/nokogiri/blob/master/LICENSE.txt"
 
 dependency "ruby"
 

@@ -18,7 +18,7 @@ name "libossp-uuid"
 default_version "1.6.2"
 
 license "MIT"
-license_file "README"
+# license_file "README"
 
 version "1.6.2" do
   source md5: "5db0d43a9022a6ebbbc25337ae28942f"

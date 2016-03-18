@@ -18,7 +18,7 @@ name "python"
 default_version "2.7.9"
 
 license "Python-2.0"
-license_file "LICENSE"
+# license_file "LICENSE"
 
 dependency "ncurses"
 dependency "zlib"

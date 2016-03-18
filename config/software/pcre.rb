@@ -18,7 +18,7 @@ name "pcre"
 default_version "8.38"
 
 license "BSD-2-Clause"
-license_file "LICENCE"
+# license_file "LICENCE"
 
 dependency "libedit"
 dependency "ncurses"

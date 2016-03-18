@@ -18,7 +18,7 @@ name "makedepend"
 default_version "1.0.5"
 
 license "MIT"
-license_file "COPYING"
+# license_file "COPYING"
 
 source url: "https://storage.googleapis.com/omnibus_sources/makedepend-1.0.5.tar.gz",
        md5: "efb2d7c7e22840947863efaedc175747"

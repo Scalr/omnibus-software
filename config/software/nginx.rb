@@ -21,7 +21,7 @@ dependency "pcre"
 dependency "openssl"
 
 license "BSD-2-Clause"
-license_file "LICENSE"
+# license_file "LICENSE"
 
 source url: "http://nginx.org/download/nginx-#{version}.tar.gz"
 

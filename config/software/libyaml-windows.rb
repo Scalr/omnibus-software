@@ -27,7 +27,7 @@ name "libyaml-windows"
 default_version "0.1.6"
 
 license "MIT"
-license_file "COPYING"
+# license_file "COPYING"
 
 dependency "ruby-windows"
 

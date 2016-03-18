@@ -18,7 +18,7 @@ name "openresty"
 default_version "1.9.7.2"
 
 license "BSD-2-Clause"
-license_file "README.markdown"
+# license_file "README.markdown"
 
 dependency "pcre"
 dependency "openssl"

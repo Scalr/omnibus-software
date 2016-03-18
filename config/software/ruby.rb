@@ -17,9 +17,9 @@
 name "ruby"
 
 license "BSD-2-Clause"
-license_file "BSDL"
-license_file "COPYING"
-license_file "LEGAL"
+# license_file "BSDL"
+# license_file "COPYING"
+# license_file "LEGAL"
 
 # This is now the main software project for anything ruby related.
 # Even if you want a pre-built version of ruby from ruby-installer, include

@@ -38,7 +38,7 @@ version "2.4.7" do
 end
 
 license "BSD-3-Clause"
-license_file "COPYING"
+# license_file "COPYING"
 
 source url: "http://download.redis.io/releases/redis-#{version}.tar.gz"
 

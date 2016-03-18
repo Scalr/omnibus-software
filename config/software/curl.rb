@@ -21,7 +21,7 @@ dependency "zlib"
 dependency "openssl"
 
 license "MIT"
-license_file "COPYING"
+# license_file "COPYING"
 
 version "7.47.1" do
   source md5: "3f9d1be7bf33ca4b8c8602820525302b"

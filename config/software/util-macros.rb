@@ -29,7 +29,7 @@ source url: "https://storage.googleapis.com/omnibus_sources/util-macros-#{versio
 
 
 license "MIT"
-license_file "COPYING"
+# license_file "COPYING"
 
 relative_path "util-macros-#{version}"
 

@@ -21,8 +21,8 @@ source git: "http://git.savannah.gnu.org/r/config.git"
 
 # http://savannah.gnu.org/projects/config
 license "GPL-3.0 (with exception)"
-license_file "config.guess"
-license_file "config.sub"
+# license_file "config.guess"
+# license_file "config.sub"
 
 relative_path "config_guess-#{version}"
 

@@ -22,8 +22,8 @@ dependency "cpanminus"
 dependency "postgresql"
 
 license "Artistic"
-license_file "README"
-license_file "LICENSES/artistic.txt"
+# license_file "README"
+# license_file "LICENSES/artistic.txt"
 
 version "3.5.3" do
   source md5: "21cdf31a8d1f77466920375aa766c164"

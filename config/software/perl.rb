@@ -17,7 +17,7 @@
 name "perl"
 
 license "Artistic-2.0"
-license_file "Artistic"
+# license_file "Artistic"
 
 if windows?
   default_version "5.8.8"

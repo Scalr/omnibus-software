@@ -17,7 +17,7 @@
 name "bundler"
 
 license "MIT"
-license_file "https://raw.githubusercontent.com/bundler/bundler/master/LICENSE.md"
+# license_file "https://raw.githubusercontent.com/bundler/bundler/master/LICENSE.md"
 
 dependency "rubygems"
 

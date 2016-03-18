@@ -23,7 +23,7 @@ name "rebar"
 default_version "93621d0d0c98035f79790ffd24beac94581b0758"
 
 license "Apache-2.0"
-license_file "LICENSE"
+# license_file "LICENSE"
 
 version "2.6.0"
 

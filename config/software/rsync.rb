@@ -18,7 +18,7 @@ name "rsync"
 default_version "3.1.1"
 
 license "GPL v3"
-license_file "COPYING"
+# license_file "COPYING"
 
 dependency "popt"
 

@@ -17,7 +17,7 @@
 name "openssl"
 
 license "OpenSSL"
-license_file "LICENSE"
+# license_file "LICENSE"
 
 fips_enabled = (project.overrides[:fips] && project.overrides[:fips][:enabled]) || false
 

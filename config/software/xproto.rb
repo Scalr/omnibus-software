@@ -28,7 +28,7 @@ end
 source url: "https://storage.googleapis.com/omnibus_sources/xproto-#{version}.tar.gz"
 
 license "MIT"
-license_file "COPYING"
+# license_file "COPYING"
 
 relative_path "xproto-#{version}"
 

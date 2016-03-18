@@ -18,7 +18,7 @@ name "berkshelf"
 default_version "master"
 
 license "Apache-2.0"
-license_file "LICENSE"
+# license_file "LICENSE"
 
 source git: "https://github.com/berkshelf/berkshelf.git"
 

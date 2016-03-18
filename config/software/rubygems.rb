@@ -17,7 +17,7 @@
 name "rubygems"
 
 license "MIT"
-license_file "LICENSE.txt"
+# license_file "LICENSE.txt"
 
 dependency "ruby"
 
