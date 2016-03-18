@@ -15,26 +15,17 @@
 #
 
 name "gdbm"
-default_version "1.8.3"
+default_version "1.9.1"
 
-# Version 1.9 and above are GPLv3, do NOT add later versions in
-version("1.8.3") { source md5: "1d1b1d5c0245b1c00aff92da751e9aa1" }
+dependency "libgcc"
 
-source url: "https://ftp.gnu.org/gnu/gdbm/gdbm-#{version}.tar.gz"
+source url: "http://ftp.gnu.org/gnu/gdbm/gdbm-1.9.1.tar.gz",
+       md5: "59f6e4c4193cb875964ffbe8aa384b58"
 
-relative_path "gdbm-#{version}"
+relative_path "gdbm-1.9.1"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
-
-  if version == "1.8.3"
-    patch source: "v1.8.3-Makefile.in.patch", plevel: 0, env: env
-  end
-
-  # Update config.guess to support newer platforms (like aarch64)
-  if version == "1.8.3"
-    patch source: "config.guess_2015-09-14.patch", plevel: 0, env: env
-  end
 
   if freebsd?
     command "./configure" \
@@ -47,6 +38,6 @@ build do
             " --prefix=#{install_dir}/embedded", env: env
   end
 
-  make "-j #{workers}", env: env
+  make "-j #{max_build_jobs}", env: env
   make "install", env: env
 end
