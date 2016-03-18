@@ -21,6 +21,9 @@ end
 name "berkshelf2"
 default_version "2.0.18"
 
+license "Apache-2.0"
+license_file "https://github.com/berkshelf/berkshelf/blob/2-0-stable/LICENSE"
+
 dependency "ruby"
 dependency "rubygems"
 dependency "nokogiri"
@@ -29,12 +32,24 @@ dependency "libffi"
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
+  gem "install celluloid" \
+      " --version '~> 0.16.0'" \
+      " --no-ri --no-rdoc", env: env
+
+  gem "install celluloid-io" \
+      " --version '~> 0.16.1'" \
+      " --no-ri --no-rdoc", env: env
+
   gem "install hashie" \
       " --version '~> 2.0.0'" \
       " --no-ri --no-rdoc", env: env
 
   gem "install varia_model" \
       " --version '0.3.2'" \
+      " --no-ri --no-rdoc", env: env
+
+  gem "install i18n" \
+      " --version '0.6.11'" \
       " --no-ri --no-rdoc", env: env
 
   gem "install berkshelf" \

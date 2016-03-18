@@ -17,17 +17,17 @@
 name "berkshelf"
 default_version "master"
 
-source git: "git://github.com/berkshelf/berkshelf"
+license "Apache-2.0"
+license_file "LICENSE"
+
+source git: "https://github.com/berkshelf/berkshelf.git"
 
 relative_path "berkshelf"
 
-if windows?
-  dependency "ruby-windows"
-  dependency "ruby-windows-devkit"
-else
-  dependency "libffi"
-  dependency "ruby"
-  dependency "rubygems"
+dependency "ruby"
+dependency "rubygems"
+
+unless windows? && (project.overrides[:ruby].nil? || project.overrides[:ruby][:version] == "ruby-windows")
   dependency "libarchive"
 end
 
@@ -39,7 +39,7 @@ build do
   env = with_standard_compiler_flags(with_embedded_path)
 
   bundle "install" \
-         " --jobs #{max_build_jobs}" \
+         " --jobs #{workers}" \
          " --without guard", env: env
 
   bundle "exec thor gem:build", env: env

@@ -18,21 +18,16 @@ name "ffi-yajl"
 default_version "master"
 relative_path "ffi-yajl"
 
-source git: "git://github.com/lamont-granquist/ffi-yajl"
+source git: "https://github.com/opscode/ffi-yajl.git"
 
-if windows?
-  dependency "ruby-windows"
-  dependency "ruby-windows-devkit"
-else
-  dependency "libffi"
-  dependency "ruby"
-  dependency "rubygems"
-end
+dependency "ruby"
 
+dependency "rubygems"
+dependency "libyajl2-gem"
 dependency "bundler"
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  env = with_embedded_path()
 
   bundle "install --without development_extras", env: env
   bundle "exec rake gem", env: env

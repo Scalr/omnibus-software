@@ -14,43 +14,37 @@
 # limitations under the License.
 #
 
-#
-# openssl 1.0.0m fixes a security vulnerability:
-#   https://www.openssl.org/news/secadv_20140605.txt
-# Since the rubyinstaller.org doesn't release ruby when a dependency gets
-# patched, we are manually patching the dependency until we get a new
-# ruby release on windows.
-# This component should be removed when we upgrade to the next version of
-# rubyinstaller > 1.9.3-p545 and 2.0.0-p451
-#
 name "openssl-windows"
-default_version "1.0.0m"
+# 1.0.1s is binary imcompatible with ruby from rubyinstaller due to an API
+# change removing SSLv2 functions.
+default_version "1.0.1r"
 
 dependency "ruby-windows"
 
-source url: "http://packages.openknapsack.org/openssl/openssl-#{version}-x86-windows.tar.lzma",
-       md5: "1836409f45d3045243bb2653ad263f11"
+if windows_arch_i386?
+  version('1.0.1r') do
+    source url: "https://github.com/jaym/windows-openssl-build/releases/download/openssl-1.0.1r/openssl-1.0.1r-x86-windows.tar.lzma",
+           md5: "72e2cab647192ddc5314760feca6b424"
+  end
+  version('1.0.1s') do
+    source url: "https://github.com/jaym/windows-openssl-build/releases/download/openssl-1.0.1s/openssl-1.0.1s-x86-windows.tar.lzma",
+           md5: "971abfe54d89d79b34c7444dcab8e17b"
+  end
+else
+  version('1.0.1r') do
+    source url: "https://github.com/jaym/windows-openssl-build/releases/download/openssl-1.0.1r/openssl-1.0.1r-x64-windows.tar.lzma",
+           md5: "d1aa3c43f21eaf42abf321cbfd9de331"
+  end
+  version('1.0.1s') do
+    source url: "https://github.com/jaym/windows-openssl-build/releases/download/openssl-1.0.1s/openssl-1.0.1s-x64-windows.tar.lzma",
+           md5: "0a8d444d22ab43ecf8ae29ec8d31fa1b"
+  end
+end
+
+relative_path 'bin'
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path)
-
-  # Make sure the OpenSSL version is suitable for our path:
-  # OpenSSL version is something like
-  # OpenSSL 1.0.0k 5 Feb 2013
-  ruby "-e \"require 'openssl'; puts 'OpenSSL patch version check expecting <= 1.0.0l'; exit(1) if OpenSSL::OPENSSL_VERSION.split(' ')[1] >= '1.0.0m'\""
-
-  tmpdir = File.join(Omnibus::Config.cache_dir, "openssl-cache")
-
-  # Ensure the directory exists
-  mkdir tmpdir
-
-  # First extract the tar file out of lzma archive.
-  command "7z.exe x #{project_file} -o#{tmpdir} -r -y", env: env
-
-  # Now extract the files out of tar archive.
-  command "7z.exe x #{File.join(tmpdir, "openssl-#{version}-x86-windows.tar")} -o#{tmpdir} -r -y", env: env
-
   # Copy over the required dlls into embedded/bin
-  copy "#{tmpdir}/bin/libeay32.dll", "#{install_dir}/embedded/bin/"
-  copy "#{tmpdir}/bin/ssleay32.dll", "#{install_dir}/embedded/bin/"
+  copy "libeay32.dll", "#{install_dir}/embedded/bin/"
+  copy "ssleay32.dll", "#{install_dir}/embedded/bin/"
 end

@@ -15,12 +15,22 @@
 #
 
 name "rsync"
-default_version "3.0.9"
+default_version "3.1.1"
+
+license "GPL v3"
+license_file "COPYING"
 
 dependency "popt"
 
-source url: "http://rsync.samba.org/ftp/rsync/src/rsync-#{version}.tar.gz",
-       md5: "5ee72266fe2c1822333c407e1761b92b"
+version "3.1.2" do
+  source md5: "0f758d7e000c0f7f7d3792610fad70cb"
+end
+
+version "3.1.1" do
+  source md5: "43bd6676f0b404326eee2d63be3cdcfe"
+end
+
+source url: "https://rsync.samba.org/ftp/rsync/src/rsync-#{version}.tar.gz"
 
 relative_path "rsync-#{version}"
 
@@ -31,6 +41,6 @@ build do
           " --prefix=#{install_dir}/embedded" \
           " --disable-iconv", env: env
 
-  make "-j #{max_build_jobs}", env: env
+  make "-j #{workers}", env: env
   make "install", env: env
 end

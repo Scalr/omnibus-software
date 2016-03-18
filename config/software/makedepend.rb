@@ -18,19 +18,22 @@ name "makedepend"
 default_version "1.0.5"
 
 source url: "https://storage.googleapis.com/omnibus_sources/makedepend-1.0.5.tar.gz",
-       md5: "efb2d7c7e22840947863efaedc175747"
 
 relative_path "makedepend-1.0.5"
 
 dependency "xproto"
 dependency "util-macros"
-dependency "pkg-config"
+dependency "pkg-config-lite"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)
 
+  if solaris2?
+    env['PKG_CONFIG'] = "#{install_dir}/embedded/bin/pkg-config"
+  end
+
   command "./configure --prefix=#{install_dir}/embedded", env: env
 
-  make "-j #{max_build_jobs}", env: env
-  make "-j #{max_build_jobs} install", env: env
+  make "-j #{workers}", env: env
+  make "-j #{workers} install", env: env
 end

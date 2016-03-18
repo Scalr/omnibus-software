@@ -17,10 +17,13 @@
 name "dep-selector-libgecode"
 default_version "1.0.2"
 
-dependency "bundler"
+license "Apache-2.0"
+license_file "https://github.com/chef/dep-selector-libgecode/blob/master/LICENSE.txt"
+
+dependency "rubygems"
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  env = with_standard_compiler_flags(with_embedded_path, bfd_flags: true)
 
   # On some RHEL-based systems, the default GCC that's installed is 4.1. We
   # need to use 4.4, which is provided by the gcc44 and gcc44-c++ packages.
@@ -30,6 +33,10 @@ build do
     env["CC"]  = "gcc44"
     env["CXX"] = "g++44"
   end
+
+  # Ruby DevKit ships with BSD Tar
+  env["PROG_TAR"] = "bsdtar" if windows?
+  env["ARFLAGS"] = "rv #{env["ARFLAGS"]}" if env["ARFLAGS"]
 
   gem "install dep-selector-libgecode" \
       " --version '#{version}'" \

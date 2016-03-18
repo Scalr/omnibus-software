@@ -17,13 +17,19 @@
 name "ncurses"
 default_version "5.9"
 
-dependency "libgcc"
+license "MIT"
+license_file "http://invisible-island.net/ncurses/ncurses-license.html"
+license_file "http://invisible-island.net/ncurses/ncurses.faq.html"
+
 dependency "libtool" if aix?
+dependency "patch" if solaris2?
 
-source url: "http://ftp.gnu.org/gnu/ncurses/ncurses-5.9.tar.gz",
-       md5: "8cb9c412e5f2d96bc6f459aa8c6282a1"
+version("5.9") { source md5: "8cb9c412e5f2d96bc6f459aa8c6282a1", url: "https://ftp.gnu.org/gnu/ncurses/ncurses-5.9.tar.gz" }
+version("5.9-20150530") { source md5: "bb2cbe1d788d3ab0138fc2734e446b43", url: "ftp://invisible-island.net/ncurses/current/ncurses-5.9-20150530.tgz" }
+version("6.0-20150613") { source md5: "0c6a0389d004c78f4a995bc61884a563", url: "ftp://invisible-island.net/ncurses/current/ncurses-6.0-20150613.tgz" }
+version("6.0-20150810") { source md5: "78bfcb4634a87b4cda390956586f8f1f", url: "ftp://invisible-island.net/ncurses/current/ncurses-6.0-20150810.tgz" }
 
-relative_path "ncurses-5.9"
+relative_path "ncurses-#{version}"
 
 ########################################################################
 #
@@ -41,38 +47,41 @@ relative_path "ncurses-5.9"
 ########################################################################
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path, aix: { use_gcc: true })
-
-  # gcc4 from opencsw fails to compile ncurses
-  if aix?
-    env["PATH"] = "/opt/csw/gcc3/bin:/opt/csw/bin:/usr/local/bin:/usr/sfw/bin:/usr/ccs/bin:/usr/sbin:/usr/bin"
-    env["CC"]   = "/opt/csw/gcc3/bin/gcc"
-    env["CXX"]  = "/opt/csw/gcc3/bin/g++"
-  end
+  env = with_standard_compiler_flags(with_embedded_path)
+  env.delete('CPPFLAGS')
 
   if smartos?
     # SmartOS is Illumos Kernel, plus NetBSD userland with a GNU toolchain.
     # These patches are taken from NetBSD pkgsrc and provide GCC 4.7.0
     # compatibility:
     # http://ftp.netbsd.org/pub/pkgsrc/current/pkgsrc/devel/ncurses/patches/
-    patch source: "patch-aa", plevel: 0
-    patch source: "patch-ab", plevel: 0
-    patch source: "patch-ac", plevel: 0
-    patch source: "patch-ad", plevel: 0
-    patch source: "patch-cxx_cursesf.h", plevel: 0
-    patch source: "patch-cxx_cursesm.h", plevel: 0
+    patch source: "patch-aa", plevel: 0, env: env
+    patch source: "patch-ab", plevel: 0, env: env
+    patch source: "patch-ac", plevel: 0, env: env
+    patch source: "patch-ad", plevel: 0, env: env
+    patch source: "patch-cxx_cursesf.h", plevel: 0, env: env
+    patch source: "patch-cxx_cursesm.h", plevel: 0, env: env
 
     # Opscode patches - <someara@opscode.com>
     # The configure script from the pristine tarball detects xopen_source_extended incorrectly.
     # Manually working around a false positive.
-    patch source: "ncurses-5.9-solaris-xopen_source_extended-detection.patch", plevel: 0
+    patch source: "ncurses-5.9-solaris-xopen_source_extended-detection.patch", plevel: 0, env: env
   end
 
-  if aix?
-    patch source: "patch-aix-configure", plevel: 0
+  # AIX's old version of patch doesn't like the patches here
+  unless aix?
+    if version == "5.9"
+      # Update config.guess to support platforms made after 2010 (like aarch64)
+      patch source: "config_guess_2015-09-24.patch", plevel: 0, env: env
+
+      # Patch to add support for GCC 5, doesn't break previous versions
+      patch source: "ncurses-5.9-gcc-5.patch", plevel: 1, env: env
+    end
   end
 
-  if mac_os_x?
+  if mac_os_x? ||
+    # Clang became the default compiler in FreeBSD 10+
+    (freebsd? && ohai['os_version'].to_i >= 1000024)
     # References:
     # https://github.com/Homebrew/homebrew-dupes/issues/43
     # http://invisible-island.net/ncurses/NEWS.html#t20110409
@@ -80,53 +89,70 @@ build do
     # Patches ncurses for clang compiler. Changes have been accepted into
     # upstream, but occurred shortly after the 5.9 release. We should be able
     # to remove this after upgrading to any release created after June 2012
-    patch source: "ncurses-clang.patch"
+    patch source: "ncurses-clang.patch", env: env
   end
 
-  # build wide-character libraries
-  cmd = [
+  if openbsd?
+    patch source: "patch-ncurses_tinfo_lib__baudrate.c", plevel: 0, env: env
+  end
+
+  configure_command = [
     "./configure",
     "--prefix=#{install_dir}/embedded",
+    "--enable-overwrite",
     "--with-shared",
     "--with-termlib",
+    "--without-ada",
+    "--without-cxx-binding",
     "--without-debug",
-    "--without-normal", # AIX doesn't like building static libs
-    "--enable-overwrite",
-    "--enable-widec",
+    "--without-manpages",
   ]
 
   if aix?
-    cmd << "--with-libtool"
+    # AIX kinda needs 5.9-20140621 or later
+    # because of a naming snafu in shared library naming.
+    # see http://invisible-island.net/ncurses/NEWS.html#t20140621
+
+    # let libtool deal with library silliness
+    configure_command << "--with-libtool=\"#{install_dir}/embedded/bin/libtool\""
+
+    # stick with just the shared libs on AIX
+    configure_command << "--without-normal"
+
+    # ncurses's ./configure incorrectly
+    # "figures out" ARFLAGS if you try
+    # to set them yourself
+    env.delete('ARFLAGS')
+
+    # use gnu install from the coreutils IBM rpm package
+    env['INSTALL'] = "/opt/freeware/bin/install"
   end
 
-  command cmd.join(" "), env: env
-  make "-j #{max_build_jobs}", env: env
-  make "-j #{max_build_jobs} install", env: env
+  # only Solaris 10 sh has a problem with
+  # parens enclosed case statement conditions the configure script
+  configure_command.unshift "bash" if solaris2?
+
+  command configure_command.join(" "), env: env
+
+  # unfortunately, libtool may try to link to libtinfo
+  # before it has been assembled; so we have to build in serial
+  make "libs", env: env if aix?
+
+  make "-j #{workers}", env: env
+  make "-j #{workers} install", env: env
 
   # Build non-wide-character libraries
   make "distclean", env: env
+  configure_command << "--enable-widec"
 
-  cmd = [
-    "./configure",
-    "--prefix=#{install_dir}/embedded",
-    "--with-shared",
-    "--with-termlib",
-    "--without-debug",
-    "--without-normal",
-    "--enable-overwrite",
-  ]
-
-  if aix?
-    cmd << "--with-libtool"
-  end
-
-  command cmd.join(" "), env: env
-  make "-j #{max_build_jobs}", env: env
+  command configure_command.join(" "), env: env
+  make "libs", env: env if aix?
+  make "-j #{workers}", env: env
 
   # Installing the non-wide libraries will also install the non-wide
   # binaries, which doesn't happen to be a problem since we don't
   # utilize the ncurses binaries in private-chef (or oss chef)
-  make "-j #{max_build_jobs} install", env: env
+  make "-j #{workers} install", env: env
 
   # Ensure embedded ncurses wins in the LD search path
   if smartos?
