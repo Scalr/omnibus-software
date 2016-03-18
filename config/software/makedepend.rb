@@ -17,7 +17,7 @@
 name "makedepend"
 default_version "1.0.5"
 
-source url: "https://storage.googleapis.com/omnibus_sources/makedepend-1.0.5.tar.gz",
+source url: "https://storage.googleapis.com/omnibus_sources/makedepend-1.0.5.tar.gz"
 
 relative_path "makedepend-1.0.5"
 
