@@ -21,7 +21,6 @@ name "libiconv"
 default_version "1.14"
 
 license "LGPL-2.1"
-license_file "COPYING.LIB"
 
 dependency "patch" if solaris2?
 
