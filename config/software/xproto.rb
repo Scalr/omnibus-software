@@ -14,7 +14,6 @@
 # limitations under the License.
 #
 
-
 name "xproto"
 default_version "7.0.25"
 
@@ -26,7 +25,7 @@ version "7.0.25" do
   source md5: "a47db46cb117805bd6947aa5928a7436"
 end
 
-source url: "https://storage.googleapis.com/omnibus_sources/xproto-#{version}.tar.gz",
+source url: "https://storage.googleapis.com/omnibus_sources/xproto-#{version}.tar.gz"
 
 license "MIT"
 license_file "COPYING"
