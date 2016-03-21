@@ -27,7 +27,7 @@ dependency "makedepend" unless aix? || windows?
 dependency "patch" if solaris2?
 dependency "openssl-fips" if fips_enabled
 
-default_version "1.0.1s"
+default_version "1.0.2g"
 
 # OpenSSL source ships with broken symlinks which windows doesn't allow.
 # Skip error checking.
