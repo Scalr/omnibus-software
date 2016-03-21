@@ -16,9 +16,6 @@
 
 name "openssl"
 
-license "OpenSSL"
-# license_file "LICENSE"
-
 fips_enabled = (project.overrides[:fips] && project.overrides[:fips][:enabled]) || false
 
 dependency "zlib"
@@ -31,7 +28,7 @@ default_version "1.0.2g"
 
 # OpenSSL source ships with broken symlinks which windows doesn't allow.
 # Skip error checking.
-source url: "https://www.openssl.org/source/openssl-#{version}.tar.gz", extract: :lax_tar
+source url: "https://www.openssl.org/source/openssl-#{version}.tar.gz"
 
 # We have not tested version 1.0.2. It's here so we can run experimental builds
 # to verify that it still compiles on all our platforms.
@@ -43,7 +40,7 @@ relative_path "openssl-#{version}"
 
 build do
 
-  env = with_standard_compiler_flags(with_embedded_path({}, msys: true), bfd_flags: true)
+  env = with_standard_compiler_flags(with_embedded_path({}), bfd_flags: true)
   if aix?
     env["M4"] = "/opt/freeware/bin/m4"
   elsif freebsd?
@@ -98,9 +95,7 @@ build do
       "perl.exe ./Configure #{platform}"
     else
       prefix =
-        if linux? && ppc64?
-          "./Configure linux-ppc64"
-        elsif linux? && ohai["kernel"]["machine"] == "s390x"
+        if linux? && ohai["kernel"]["machine"] == "s390x"
           "./Configure linux64-s390x"
         else
           "./config"
@@ -117,8 +112,6 @@ build do
     patch_env = env.dup
     patch_env['PATH'] = "/opt/freeware/bin:#{env['PATH']}"
     patch source: "openssl-1.0.1f-do-not-build-docs.patch", env: patch_env
-  else
-    patch source: "openssl-1.0.1f-do-not-build-docs.patch", env: env
   end
 
   if windows?
@@ -136,7 +129,7 @@ build do
 
   configure_command = configure_args.unshift(configure_cmd).join(" ")
 
-  command configure_command, env: env, in_msys_bash: true
+  command configure_command, env: env
   make "depend", env: env
   # make -j N on openssl is not reliable
   make env: env
