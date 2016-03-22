@@ -15,14 +15,14 @@
 #
 
 name "gdbm"
-default_version "1.9.1"
+default_version "1.11"
 
 dependency "libgcc"
 
-source url: "http://ftp.gnu.org/gnu/gdbm/gdbm-1.9.1.tar.gz",
-       md5: "59f6e4c4193cb875964ffbe8aa384b58"
+source url: "http://ftp.gnu.org/gnu/gdbm/gdbm-1.11.tar.gz",
+       md5: "72c832680cf0999caedbe5b265c8c1bd"
 
-relative_path "gdbm-1.9.1"
+relative_path "gdbm-1.11"
 
 build do
   env = with_standard_compiler_flags(with_embedded_path)

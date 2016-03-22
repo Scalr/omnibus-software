@@ -15,20 +15,25 @@
 #
 
 name "liblzma"
-default_version "5.0.8"
+default_version "5.2.2"
 
 source url: "http://tukaani.org/xz/xz-#{version}.tar.gz",
-       md5: "d19507f40e0d904d0a1b7914b173800e"
+       md5: "7cf6a8544a7dae8e8106fdf7addfa28c"
 
 relative_path "xz-#{version}"
 
 build do
-  env = with_standard_compiler_flags(with_embedded_path)
+  env = with_standard_compiler_flags(with_embedded_path({}), bfd_flags: true)
+  # liblzma properly uses CFLAGS for C compilation and CPPFLAGS for common
+  # flags used across tools such as windres.  Don't put anything in it
+  # that can be misinterpreted by windres.
+  env['CPPFLAGS'] = "-I#{install_dir}/embedded/include" if windows?
 
   command "./configure" \
-          " --prefix=#{install_dir}/embedded" \
-          " --disable-debug" \
-          " --disable-dependency-tracking", env: env
+           " --prefix=#{install_dir}/embedded" \
+           " --disable-debug" \
+           " --disable-dependency-tracking", env: env
+
 
   make "install", env: env
 end
