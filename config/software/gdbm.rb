@@ -19,7 +19,7 @@ default_version "1.11"
 
 dependency "libgcc"
 
-source url: "http://ftp.gnu.org/gnu/gdbm/gdbm-1.11.tar.gz",
+source url: "https://storage.googleapis.com/omnibus_sources/gdbm-1.11.tar.gz",
        md5: "72c832680cf0999caedbe5b265c8c1bd"
 
 relative_path "gdbm-1.11"

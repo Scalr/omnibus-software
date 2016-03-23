@@ -19,7 +19,7 @@ default_version '0.1.6'
 
 license "MIT"
 
-source url: "http://pyyaml.org/download/libyaml/yaml-#{version}.tar.gz",
+source url: "https://storage.googleapis.com/omnibus_sources/yaml-#{version}.tar.gz",
        md5: '5fe00cda18ca5daeb43762b80c38e06e'
 
 relative_path "yaml-#{version}"

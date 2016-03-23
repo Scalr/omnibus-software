@@ -28,7 +28,7 @@ default_version "1.0.2g"
 
 # OpenSSL source ships with broken symlinks which windows doesn't allow.
 # Skip error checking.
-source url: "https://www.openssl.org/source/openssl-#{version}.tar.gz"
+source url: "https://storage.googleapis.com/omnibus_sources/openssl-#{version}.tar.gz"
 
 # We have not tested version 1.0.2. It's here so we can run experimental builds
 # to verify that it still compiles on all our platforms.
