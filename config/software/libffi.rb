@@ -72,5 +72,4 @@ build do
     copy "#{install_dir}/embedded/lib64/*", "#{install_dir}/embedded/lib/"
     delete "#{install_dir}/embedded/lib64"
   end
-
 end
